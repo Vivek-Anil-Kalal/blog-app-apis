@@ -3,7 +3,6 @@ package com.blog.controllers;
 import com.blog.security.JwtRequest;
 import com.blog.security.JwtResponse;
 import com.blog.security.JwtTokenHelper;
-import com.blog.utils.SecretKeyEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
