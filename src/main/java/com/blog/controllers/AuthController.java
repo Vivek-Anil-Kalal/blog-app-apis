@@ -1,5 +1,6 @@
 package com.blog.controllers;
 
+import com.blog.exceptions.ApiException;
 import com.blog.security.JwtRequest;
 import com.blog.security.JwtResponse;
 import com.blog.security.JwtTokenHelper;
@@ -28,7 +29,7 @@ public class AuthController {
     private JwtTokenHelper jwtTokenHelper;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest jwtRequest) {
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest jwtRequest) throws Exception {
         System.out.println(jwtRequest.getEmail() + " " + jwtRequest.getPassword());
         this.doAuthenticate(jwtRequest.getEmail(), jwtRequest.getPassword());
         UserDetails userDetails = userDetailsService.loadUserByUsername(jwtRequest.getEmail());
@@ -40,12 +41,12 @@ public class AuthController {
         return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
     }
 
-    public void doAuthenticate(String email, String password) {
+    public void doAuthenticate(String email, String password) throws Exception {
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, password);
         try {
             authenticationManager.authenticate(authentication);
         } catch (BadCredentialsException e) {
-            System.out.println("Bad Credential Exception");
+            throw new ApiException("Invalid credentiols");
         }
     }
 }
